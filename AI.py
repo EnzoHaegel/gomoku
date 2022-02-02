@@ -43,3 +43,36 @@ class Ai:
             return board
         if board.update_board(self._symbol, self.get_opponent_winning_move(board)):
             return board
+
+
+
+# ------------------------------Unit Test---------------------------------- #
+
+
+def test_get_symbol():
+    ai = Ai(3, 'X')
+    assert ai.get_symbol() == 'X'
+
+
+def test_get_opponent_symbol():
+    ai = Ai(3, 'X')
+    assert ai.get_opponent_symbol() == 'O'
+
+
+def test_get_winning_move():
+    board = Board.Board(3)
+    board.update_board(0, 0)
+    board.update_board(1, 1)
+    board.update_board(2, 2)
+
+    ai = Ai(3, 'X')
+
+    assert ai.get_winning_move(board) == (2, 2)
+
+
+def test_play():
+    board = Board.Board(3)
+
+    ai = Ai(3, 'X')
+
+    assert not ai.play_best_move(board).check_winner('X')

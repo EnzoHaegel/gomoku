@@ -22,6 +22,6 @@ jobs:
         run: pip install pytest coverage
       - name: Run tests
         run: coverage run -m pytest -v Board.py
-        # run: coverage run -m pytest AI.py
+        run: coverage run -m pytest AI.py
         # run: coverage run -m pytest pbrain-gomoku-ai.py
         # run: coverage run -m pytest input_parser.py
