@@ -180,7 +180,7 @@ class Board:
         new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5))
         for i in range(position[0] - 5, position[0] + 5 + 1):
             for j in range(position[1] - 5, position[1] + 5 + 1):
-                if self.is_position_in_range((i - position[0] + 5, j - position[1] + 5)):
+                if new_board.is_position_in_range((i - position[0] + 5, j - position[1] + 5)):
                     new_board.update_board(self._board[i][j], (i - position[0] + 5, j - position[1] + 5))
         return new_board
     
