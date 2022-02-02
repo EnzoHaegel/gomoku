@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing_extensions import Self
 import Board
 
 class Ai:
@@ -18,8 +17,8 @@ class Ai:
         :return: return the opponent symbol of the AI
         """
         return 'O' if self._symbol == 'X' else 'X'
-    
-    def get_winning_move(self, board: Board, symbol: str | None = Self._symbol) -> tuple(int, int) | None:
+
+    def get_winning_move(self, board: Board, symbol: str | None) -> tuple(int, int) | None:
         """
         :param board: current state of the board (Board Class)
         :return: return a tuple with the position of the winning move, otherwise None
@@ -39,7 +38,7 @@ class Ai:
         return self.get_winning_move(board, self.get_opponent_symbol())
     
     def play_best_move(self, board: Board) -> Board:
-        if board.update_board(self._symbol, self.get_winning_move(board)):
+        if board.update_board(self._symbol, self.get_winning_move(board, self._symbol)):
             return board
         if board.update_board(self._symbol, self.get_opponent_winning_move(board)):
             return board
@@ -67,7 +66,7 @@ def test_get_winning_move():
 
     ai = Ai(3, 'X')
 
-    assert ai.get_winning_move(board) == (2, 2)
+    assert ai.get_winning_move(board, ai._symbol) == (2, 2)
 
 
 def test_play():
