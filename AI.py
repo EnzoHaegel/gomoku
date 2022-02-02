@@ -59,19 +59,13 @@ def test_get_opponent_symbol():
 
 
 def test_get_winning_move():
-    board = Board.Board(3)
-    board.update_board(0, 0)
-    board.update_board(1, 1)
-    board.update_board(2, 2)
+    board = Board.Board(6)
+    ai = Ai(board._board_size, 'X')
 
-    ai = Ai(3, 'X')
-
-    assert ai.get_winning_move(board, ai._symbol) == (2, 2)
-
-
-def test_play():
-    board = Board.Board(3)
-
-    ai = Ai(3, 'X')
-
-    assert not ai.play_best_move(board).check_winner('X')
+    assert ai.get_winning_move(board, ai._symbol) == None
+    assert ai.get_opponent_winning_move(board, ai._symbol) == None
+    for i in range(4):
+        board.update_board('X', (i, i))
+        board.update_board('O', (i+1, 0))
+    assert ai.get_winning_move(board, ai._symbol) == (4, 4)
+    assert ai.get_opponent_winning_move(board, ai._symbol) == (4, 0)
