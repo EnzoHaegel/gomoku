@@ -49,7 +49,7 @@ class Board:
         if position == None:
             return False
         self._board[position[0]][position[1]] = symbol
-        if symbol is 'X':
+        if symbol == 'X':
             self._last_X_played = position
         else:
             self._last_O_played = position
