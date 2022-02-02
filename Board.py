@@ -228,6 +228,11 @@ def test_create_sub_board_Board():
     assert sub_board._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
                                 [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
                                 [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
+    sub_board2 = board.create_sub_board((3, 4))
+    assert sub_board2._board_size == 6
+    assert sub_board2._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
+                                [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
+                                [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
 
     print("Test of create sub board class Board: OK")
 
