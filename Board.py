@@ -194,6 +194,7 @@ class Board:
 
 # ------------------------------Unit Test---------------------------------- #
 
+
 def test_class_Board():
     board = Board(7)
     assert board._board_size == 7
@@ -213,6 +214,25 @@ def test_class_Board():
     assert not board.is_valid_move((8, 8))
 
     print("Test of constructor class Board: OK")
+
+def test_is_full_Board():
+    board = Board(5)
+    assert board.is_full() == False
+    for i in range(5):
+        for j in range(5):
+            board.update_board('X', (i, j))
+    assert board.is_full() == True
+
+
+def test_get_empty_positions():
+    board = Board(5)
+    assert len(board.get_empty_positions()) == 25
+
+    for i in range(5):
+        for j in range(5):
+            board.update_board('X', (i, j))
+
+    assert len(board.get_empty_positions()) == 0
 
 def test_create_sub_board_Board():
     board = Board(7)
