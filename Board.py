@@ -46,7 +46,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: None
         """
-        if position == None:
+        if position == None or self._board[position[0]][position[1]] != None:
             return False
         self._board[position[0]][position[1]] = symbol
         if symbol == 'X':
@@ -159,19 +159,6 @@ class Board:
                 new_board.update_board(self._board[i][j], (i, j))
         return new_board
 
-    # Create a Sub board of this board in 11X11, start at position -5  and end at +5 and check if there == No valueError
-    def create_sub_board(self, position: tuple(int, int)) -> Board:
-        """
-        :param position: position on the board (x, y)
-        :return: return a copy of the current board
-        """
-        new_board = Board(11)
-        for i in range(position[0] - 5, position[0] + 5 + 1):
-            for j in range(position[1] - 5, position[1] + 5 + 1):
-                if self.is_position_in_range((i, j)):
-                    new_board.update_board(self._board[i][j], (i - position[0] + 5, j - position[1] + 5))
-        return new_board
-    
     #check if position is in range of the board
     def is_position_in_range(self, position: tuple(int, int)) -> bool:
         """
@@ -183,6 +170,19 @@ class Board:
         if position[1] < 0 or position[1] > self._board_size - 1:
             return False
         return True
+
+    # Create a Sub board of this board with size position -5 to position +5 but that don't exced size of actual board and check if position is in range
+    def create_sub_board(self, position: tuple(int, int)) -> Board:
+        """
+        :param position: position on the board (x, y)
+        :return: return a copy of the current board
+        """
+        new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5))
+        for i in range(position[0] - 5, position[0] + 5 + 1):
+            for j in range(position[1] - 5, position[1] + 5 + 1):
+                if self.is_position_in_range((i, j)):
+                    new_board.update_board(self._board[i][j], (i - position[0] + 5, j - position[1] + 5))
+        return new_board
     
     def reset_board(self):
         """
