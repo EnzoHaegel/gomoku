@@ -10,7 +10,7 @@ import random
 class Board:
     def __init__(self, board_size):
         self._board_size = board_size
-        self._board = [[None for _ in range(self._board_size)] for _ in range(self._board_size)]
+        self._board = [[None for _ in range(1, self._board_size)] for _ in range(1, self._board_size)]
         self._last_X_played: tuple(int, int) | None = None
         self._last_O_played: tuple(int, int) | None = None
 
@@ -177,7 +177,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: return a copy of the current board
         """
-        new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5))
+        new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5) + 1)
         for i in range(position[0] - 5, position[0] + 5 + 1):
             for j in range(position[1] - 5, position[1] + 5 + 1):
                 if new_board.is_position_in_range((i - position[0] + 5, j - position[1] + 5)):
@@ -203,9 +203,11 @@ def test_class_Board():
 
     board.update_board('X', (0, 0))
     assert board.get_row_col(0, 0) == 'X'
+    assert board._last_X_played == (0, 0)
 
     board.update_board('O', (1, 1))
     assert board.get_row_col(1, 1) == 'O'
+    assert board._last_O_played == (1, 1)
 
     assert not board.is_valid_move((-1, -1))
     assert not board.is_valid_move((8, 8))
@@ -214,11 +216,12 @@ def test_class_Board():
 
 def test_create_sub_board_Board():
     board = Board(7)
+    board.update_board('X', (0, 0))
     board.update_board('X', (2, 2))
     board.update_board('O', (1, 1))
     sub_board = board.create_sub_board((0, 0))
     assert sub_board._board_size == 6
-    assert sub_board._board == [[None, None, None, None, None, None], [None, 'O', None, None, None, None],
+    assert sub_board._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
                                 [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
                                 [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
 
