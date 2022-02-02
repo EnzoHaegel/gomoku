@@ -214,11 +214,12 @@ def test_class_Board():
 
 def test_create_sub_board_Board():
     board = Board(7)
-    board.update_board('X', (0, 0))
+    board.update_board('X', (2, 2))
     board.update_board('O', (1, 1))
     sub_board = board.create_sub_board((0, 0))
-    assert sub_board._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
-                                [None, None, None, None, None, None], [None, None, None, None, None ,None],
+    assert sub_board._board_size == 6
+    assert sub_board._board == [[None, None, None, None, None, None], [None, 'O', None, None, None, None],
+                                [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
                                 [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
 
     print("Test of create sub board class Board: OK")
