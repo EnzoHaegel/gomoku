@@ -33,7 +33,7 @@ class Board:
         for i in range(len(self._board)):
             temp = []
             for j in range(len(self._board[i])):
-                if self._board[i][j] is None:
+                if self._board[i][j] == None:
                     temp.append(".")
                 else:
                     temp.append(self._board[i][j])
@@ -46,7 +46,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: None
         """
-        if position is None:
+        if position == None:
             return False
         self._board[position[0]][position[1]] = symbol
         if symbol is 'X':
@@ -75,7 +75,7 @@ class Board:
         """
         if not self.is_position_in_range(position):
             return False
-        if self._board[position[0]][position[1]] is None:
+        if self._board[position[0]][position[1]] == None:
             return True
         return False
 
@@ -85,7 +85,7 @@ class Board:
         """
         for i in range(len(self._board)):
             for j in range(len(self._board[i])):
-                if self._board[i][j] is None:
+                if self._board[i][j] == None:
                     return False
         return True
 
@@ -133,7 +133,7 @@ class Board:
         while not self.is_valid_move((row, col)):
             row = random.randint(0, self._board_size - 1)
             col = random.randint(0, self._board_size - 1)
-        if self._board[row][col] is None:
+        if self._board[row][col] == None:
             self._board[row][col] = symbol
 
     def get_empty_positions(self) -> list[(int, int)]:
@@ -144,7 +144,7 @@ class Board:
 
         for i in range(len(self._board)):
             for j in range(len(self._board[i])):
-                if self._board[i][j] is None:
+                if self._board[i][j] == None:
                     empty_positions.append((i, j))
         return empty_positions
 
@@ -159,7 +159,7 @@ class Board:
                 new_board.update_board(self._board[i][j], (i, j))
         return new_board
 
-    # Create a Sub board of this board in 11X11, start at position -5  and end at +5 and check if there is no valueError
+    # Create a Sub board of this board in 11X11, start at position -5  and end at +5 and check if there == No valueError
     def create_sub_board(self, position: tuple(int, int)) -> Board:
         """
         :param position: position on the board (x, y)
@@ -198,8 +198,8 @@ def test_class_Board():
     board = Board(7)
     assert board._board_size == 7
     assert board._board == [[None for _ in range(7)] for _ in range(7)]
-    assert board._last_X_played is None
-    assert board._last_O_played is None
+    assert board._last_X_played == None
+    assert board._last_O_played == None
 
     board.update_board('X', (0, 0))
     assert board.get_row_col(0, 0) == 'X'
