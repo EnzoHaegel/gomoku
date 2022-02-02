@@ -177,7 +177,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: return a copy of the current board
         """
-        new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5) + 1)
+        new_board = Board(min(min(self._board_size, position[0] + 5) - max(0, position[0] - 5) + 1), self._board_size)
 
         for i in range(max(0, position[0] - 5), min(self._board_size, position[0] + 5)):
             for j in range(max(0, position[1] - 5), min(self._board_size, position[1] + 5)):
@@ -229,7 +229,7 @@ def test_create_sub_board_Board():
                                 [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
                                 [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
     sub_board2 = board.create_sub_board((3, 4))
-    assert sub_board2._board_size == 6
+    assert sub_board2._board_size == 7
     assert sub_board2._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
                                 [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
                                 [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
