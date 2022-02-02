@@ -178,10 +178,10 @@ class Board:
         :return: return a copy of the current board
         """
         new_board = Board(min(self._board_size, position[0] + 5) - max(0, position[0] - 5) + 1)
-        for i in range(position[0] - 5, position[0] + 5 + 1):
-            for j in range(position[1] - 5, position[1] + 5 + 1):
-                if new_board.is_position_in_range((i - position[0] + 5, j - position[1] + 5)):
-                    new_board.update_board(self._board[i][j], (i - position[0] + 5, j - position[1] + 5))
+
+        for i in range(max(0, position[0] - 5), min(self._board_size, position[0] + 5)):
+            for j in range(max(0, position[1] - 5), min(self._board_size, position[1] + 5)):
+                new_board.update_board(self._board[i][j], (i - max(0, position[0] - 5), j - max(0, position[1] - 5)))
         return new_board
     
     def reset_board(self):
@@ -220,6 +220,10 @@ def test_create_sub_board_Board():
     board.update_board('X', (2, 2))
     board.update_board('O', (1, 1))
     sub_board = board.create_sub_board((0, 0))
+    assert board._board == [['X', None, None, None, None, None, None], [None, 'O', None, None, None, None, None],
+                                [None, None, 'X', None, None, None, None], [None, None, None, None, None ,None, None],
+                                [None ,None ,None ,None ,None ,None, None], [None ,None ,None ,None ,None ,None, None],
+                                [None ,None ,None ,None ,None ,None, None]]
     assert sub_board._board_size == 6
     assert sub_board._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
                                 [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
