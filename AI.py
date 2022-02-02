@@ -1,6 +1,6 @@
+from __future__ import annotations
 from typing_extensions import Self
 import Board
-from __future__ import annotations
 
 class Ai:
     def __init__(self, board_size: int, symbol: str | None):
