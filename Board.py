@@ -10,7 +10,7 @@ import random
 class Board:
     def __init__(self, board_size):
         self._board_size = board_size
-        self._board = [[None for _ in range(1, self._board_size)] for _ in range(1, self._board_size)]
+        self._board = [[None for _ in range(self._board_size)] for _ in range(self._board_size)]
         self._last_X_played: tuple(int, int) | None = None
         self._last_O_played: tuple(int, int) | None = None
 
