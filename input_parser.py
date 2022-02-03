@@ -24,7 +24,7 @@ class InputParser(metaclass=Singleton):
             return False
 
     def start(self, size: str = "20") -> bool:
-        supported_sizes = [20]
+        supported_sizes = [i for i in range(25)]
         if int(size) in supported_sizes:
             print("OK")
         else:
