@@ -63,7 +63,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: True if the move is valid, False if not
         """
-        if position == None:
+        if position == None or position[0] == None or position[1] == None:
             return False
         if not self.is_position_in_range(position):
             return False
@@ -190,6 +190,7 @@ class Board:
         :return: True if the player that played the symbol have won, else False
         """
         # Check horizontal threat
+        res: list[tuple(int, int)] = []
         for i in range(len(self._board) - 4):
             for j in range(len(self._board[i])):
                 if self.is_valid_move((i, j)) and self.is_valid_move((i + 5, j)):
@@ -201,7 +202,7 @@ class Board:
                         if self.is_valid_move((i + k, j)):
                             empty.append((i + k, j))
                     if len(empty) == 1:
-                        return empty[0]
+                        res.append(empty[0])
 
         # Check vertical threat
         for i in range(len(self._board)):
@@ -215,7 +216,7 @@ class Board:
                         if self.is_valid_move((i, j + k)):
                             empty.append((i, j + k))
                     if len(empty) == 1:
-                        return empty[0]
+                        res.append(empty[0])
 
         # Check positive slope diagonal threat
         for i in range(len(self._board) - 4):
@@ -229,7 +230,7 @@ class Board:
                         if self.is_valid_move((i + k, j + k)):
                             empty.append((i + k, j + k))
                     if len(empty) == 1:
-                        return empty[0]
+                        res.append(empty[0])
 
         # Check negative slope diagonal threat
         for i in range(4, len(self._board)):
@@ -243,8 +244,10 @@ class Board:
                         if self.is_valid_move((i - k, j + k)):
                             empty.append((i - k, j + k))
                     if len(empty) == 1:
-                        return empty[0]
-        return None
+                        res.append(empty[0])
+        if len(res) > 0:
+            return res[0], res
+        return None, []
 
     def is_one_side_tile_empty(self, position: tuple(int, int)) -> tuple(int, int) | None:
         """
