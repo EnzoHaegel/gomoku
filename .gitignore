@@ -3,3 +3,4 @@ __py*
 tmp
 .vs*
 .coverage
+.py*

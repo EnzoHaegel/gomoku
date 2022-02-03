@@ -42,30 +42,7 @@ class Ai:
             return board
         if board.update_board(self._symbol, self.get_opponent_winning_move(board)):
             return board
-
-
-
-# ------------------------------Unit Test---------------------------------- #
-
-
-def test_get_symbol():
-    ai = Ai(3, 'X')
-    assert ai.get_symbol() == 'X'
-
-
-def test_get_opponent_symbol():
-    ai = Ai(3, 'X')
-    assert ai.get_opponent_symbol() == 'O'
-
-
-def test_get_winning_move():
-    board = Board.Board(6)
-    ai = Ai(board._board_size, 'X')
-
-    assert ai.get_winning_move(board, ai._symbol) == None
-    assert ai.get_opponent_winning_move(board) == None
-    for i in range(4):
-        board.update_board('X', (i, i))
-        board.update_board('O', (i + 1, 0))
-    assert ai.get_winning_move(board, ai._symbol) == (4, 4)
-    assert ai.get_opponent_winning_move(board) == (5, 0)
+        if board.update_board(self._symbol, board.block_threat_of_three(board.get_opponent_symbol())):
+            return board
+        board.random_play(self._symbol)
+        return board

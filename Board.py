@@ -190,109 +190,54 @@ class Board:
         """
         self._board = [[None for _ in range(self._board_size)] for _ in range(self._board_size)]
 
+    def block_threat_of_three(self, symbol: str | None) -> tuple(int, int) | None:
+        """
+        :param symbol: 'X' 'O' or None
+        :return: True if the player that played the symbol have won, else False
+        """
+        # Check horizontal threat
+        for i in range(len(self._board) - 4):
+            for j in range(len(self._board[i])):
+                if self.is_valid_move((i, j)) and self._board[i + 1][j] == symbol and self._board[i + 2][j] == symbol \
+                        and self._board[i + 3][j] == symbol and self.is_valid_move((i + 4, j)) and self.is_valid_move((i + 5, j)):
+                    return (i + 4, j)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i + 1, j)) and self._board[i + 2][j] == symbol \
+                        and self._board[i + 3][j] == symbol and self._board[i + 4][j] == symbol and self.is_valid_move((i + 5, j)):
+                    return (i + 1, j)
 
+        # Check vertical threat
+        for i in range(len(self._board) - 1, 3, -1):
+            for j in range(len(self._board[i])):
+                if self.is_valid_move((i, j)) and self._board[i - 1][j] == symbol and self._board[i - 2][j] == symbol \
+                        and self._board[i - 3][j] == symbol and self.is_valid_move((i - 4, j)) and self.is_valid_move((i - 5, j)):
+                    return (i - 4, j)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i - 1, j)) and self._board[i - 2][j] == symbol \
+                        and self._board[i - 3][j] == symbol and self._board[i - 4][j] == symbol and self.is_valid_move((i - 5, j)):
+                    return (i - 1, j)
 
-# ------------------------------Unit Test---------------------------------- #
+        # Check positive slope diagonal
+        for i in range(len(self._board) - 4):
+            for j in range(len(self._board[i]) - 4):
+                if self.is_valid_move((i, j)) and self.is_valid_move((i + 1, j + 1)) and self._board[i + 2][j + 2] == symbol \
+                        and self._board[i + 3][j + 3] == symbol and self._board[i + 4][j + 4] == symbol and \
+                        self.is_valid_move((i + 5, j + 5)):
+                    return (i + 1, j + 1)
+                if self.is_valid_move((i, j)) and self._board[i + 1][j + 1] == symbol and self._board[i + 2][j + 2] == symbol \
+                        and self._board[i + 3][j + 3] == symbol and self.is_valid_move((i + 4, j + 4)) and \
+                        self.is_valid_move((i + 5, j + 5)):
+                    return (i + 4, j + 4)
 
-
-def test_class_Board():
-    board = Board(7)
-    assert board._board_size == 7
-    assert board._board == [[None for _ in range(7)] for _ in range(7)]
-    assert board._last_X_played == None
-    assert board._last_O_played == None
-
-    board.update_board('X', (0, 0))
-    assert board.get_row_col(0, 0) == 'X'
-    assert board._last_X_played == (0, 0)
-
-    board.update_board('O', (1, 1))
-    assert board.get_row_col(1, 1) == 'O'
-    assert board._last_O_played == (1, 1)
-
-    assert not board.is_valid_move((-1, -1))
-    assert not board.is_valid_move((8, 8))
-
-    print("Test of constructor class Board: OK")
-
-def test_is_full_Board():
-    board = Board(5)
-    assert board.is_full() == False
-    for i in range(5):
-        for j in range(5):
-            board.update_board('X', (i, j))
-    assert board.is_full() == True
-
-
-def test_get_empty_positions():
-    board = Board(5)
-    assert len(board.get_empty_positions()) == 25
-
-    for i in range(5):
-        for j in range(5):
-            board.update_board('X', (i, j))
-
-    assert len(board.get_empty_positions()) == 0
-
-def test_create_sub_board_Board():
-    board = Board(7)
-    board.update_board('X', (0, 0))
-    board.update_board('X', (2, 2))
-    board.update_board('O', (1, 1))
-    sub_board = board.create_sub_board((0, 0))
-    assert board._board == [['X', None, None, None, None, None, None], [None, 'O', None, None, None, None, None],
-                                [None, None, 'X', None, None, None, None], [None, None, None, None, None ,None, None],
-                                [None ,None ,None ,None ,None ,None, None], [None ,None ,None ,None ,None ,None, None],
-                                [None ,None ,None ,None ,None ,None, None]]
-    assert sub_board._board_size == 6
-    assert sub_board._board == [['X', None, None, None, None, None], [None, 'O', None, None, None, None],
-                                [None, None, 'X', None, None, None], [None, None, None, None, None ,None],
-                                [None ,None ,None ,None ,None ,None], [None ,None ,None ,None ,None ,None]]
-    sub_board2 = board.create_sub_board((3, 4))
-    assert sub_board2._board_size == 7
-    assert sub_board2._board == [['X', None, None, None, None, None, None], [None, 'O', None, None, None, None, None],
-                                [None, None, 'X', None, None, None, None], [None, None, None, None, None ,None, None],
-                                [None ,None ,None ,None ,None ,None, None], [None ,None ,None ,None ,None ,None, None],
-                                [None ,None ,None ,None ,None ,None, None]]
-
-    print("Test of create sub board class Board: OK")
-
-def test_is_position_in_range():
-    board = Board(7)
-    assert board.is_position_in_range((0, 0))
-    assert not board.is_position_in_range((-1, -1))
-    assert not board.is_position_in_range((8, 8))
-
-    print("Test of is position in range class Board: OK")
-
-def test_get_empty_positions():
-    board = Board(7)
-    assert len(board.get_empty_positions()) == 49
-
-    board.update_board('X', (0, 0))
-    assert len(board.get_empty_positions()) == 48
-
-    print("Test of get empty positions class Board: OK")
-
-def test_update_board():
-    board = Board(7)
-    assert board.update_board('X', (0, 0))
-    assert not board.update_board('X', (0, 0))
-
-    print("Test of update board class Board: OK")
-
-def test_check_winner():
-    board = Board(7)
-    assert not board.check_winner('X')
-
-    # set 5 'X' and check winner
-    for i in range(4):
-        board.update_board('X', (i, 0))
-        board.update_board('X', (i, 0))
-        board.update_board('X', (i, 0))
-        board.update_board('X', (i, 0))
-    assert not board.check_winner('X')
-
-    # set the last 'X' and check winner
-    board.update_board('X', (4, 0))
-    assert board.check_winner('X')
+        # Check negative slope diagonal
+        for i in range(4, len(self._board)):
+            for j in range(len(self._board[i]) - 4):
+                if self.is_valid_move((i, j)) and self._board[i - 1][j + 1] == symbol and self._board[i - 2][j + 2] == symbol \
+                        and self._board[i - 3][j + 3] == symbol and self.is_valid_move((i - 4, j + 4)) and \
+                        self.is_valid_move((i - 5, j + 5)):
+                    return (i - 4, j + 4)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i - 1, j + 1)) and \
+                        self._board[i - 2][j + 2] == symbol and \
+                        self._board[i - 3][j + 3] == symbol and \
+                        self._board[i - 4][j + 4] == symbol and \
+                        self.is_valid_move((i - 5, j+5)):
+                    return (i - 1, j + 1)
+        return None
