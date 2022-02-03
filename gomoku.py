@@ -4,7 +4,7 @@ import sys
 
 
 def main():
-    bsize = 15
+    bsize = 10
     board = Board(bsize)
     board.print_board()
     iax = Ai(bsize, 'X')

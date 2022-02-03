@@ -195,6 +195,9 @@ class Board:
                 if self.is_valid_move((i, j)) and self.is_valid_move((i + 5, j)):
                     empty: list[tuple(int, int)] = []
                     for k in range(1, 5):
+                        if self._board[i + k][j] != symbol and self._board[i + k][j] != None:
+                            empty = []
+                            break
                         if self.is_valid_move((i + k, j)):
                             empty.append((i + k, j))
                     if len(empty) == 1:
@@ -206,26 +209,23 @@ class Board:
                 if self.is_valid_move((i, j)) and self.is_valid_move((i, j + 5)):
                     empty: list[tuple(int, int)] = []
                     for k in range(1, 5):
+                        if self._board[i][j + k] != symbol and self._board[i][j + k] != None:
+                            empty = []
+                            break
                         if self.is_valid_move((i, j + k)):
                             empty.append((i, j + k))
                     if len(empty) == 1:
                         return empty[0]
 
-        for i in range(len(self._board) - 1, 3, -1):
-            for j in range(len(self._board[i])):
-                if self.is_valid_move((i, j)) and self._board[i - 1][j] == symbol and self._board[i - 2][j] == symbol \
-                        and self._board[i - 3][j] == symbol and self.is_valid_move((i - 4, j)) and self.is_valid_move((i - 5, j)):
-                    return (i - 4, j)
-                if self.is_valid_move((i, j)) and self.is_valid_move((i - 1, j)) and self._board[i - 2][j] == symbol \
-                        and self._board[i - 3][j] == symbol and self._board[i - 4][j] == symbol and self.is_valid_move((i - 5, j)):
-                    return (i - 1, j)
-
-                # Check positive slope diagonal threat
+        # Check positive slope diagonal threat
         for i in range(len(self._board) - 4):
             for j in range(len(self._board[i]) - 4):
                 if self.is_valid_move((i, j)) and self.is_valid_move((i + 5, j + 5)):
                     empty: list[tuple(int, int)] = []
                     for k in range(1, 5):
+                        if self._board[i + k][j + k] != symbol and self._board[i + k][j + k] != None:
+                            empty = []
+                            break
                         if self.is_valid_move((i + k, j + k)):
                             empty.append((i + k, j + k))
                     if len(empty) == 1:
@@ -237,6 +237,9 @@ class Board:
                 if self.is_valid_move((i, j)) and self.is_valid_move((i - 5, j + 5)):
                     empty: list[tuple(int, int)] = []
                     for k in range(1, 5):
+                        if self._board[i - k][j + k] != symbol and self._board[i - k][j + k] != None:
+                            empty = []
+                            break
                         if self.is_valid_move((i - k, j + k)):
                             empty.append((i - k, j + k))
                     if len(empty) == 1:
@@ -255,4 +258,3 @@ class Board:
                 if self.is_valid_move((position[0] + i - 1, position[1] + j - 1)):
                     return (position[0] + i - 1, position[1] + j - 1)
         return None
-
