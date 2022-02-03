@@ -25,7 +25,7 @@ class Ai:
         """
         for position in board.get_empty_positions():
             tmp = board.copy_board()
-            tmp.set_symbol(position[0], position[1], symbol)
+            tmp.update_board(symbol, (position[0], position[1]))
             if tmp.check_winner(symbol):
                 return position
         return None
@@ -54,4 +54,16 @@ class Ai:
         d = board.block_threat_of_three(self.get_opponent_symbol())
         if board.update_board(self._symbol, d):
             return board, d
+        if self._symbol == 'X':
+            e = board.is_one_side_tile_empty(board._last_X_played)
+        else:
+            e = board.is_one_side_tile_empty(board._last_O_played)
+        if board.update_board(self._symbol, e):
+            return board, e
+        if self._symbol == 'X':
+            e = board.is_one_side_tile_empty(board._last_O_played)
+        else:
+            e = board.is_one_side_tile_empty(board._last_X_played)
+        if board.update_board(self._symbol, e):
+            return board, e
         return board, board.random_play(self._symbol)

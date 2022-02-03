@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import random
+import AI
 
 
 class Board:
@@ -46,33 +47,24 @@ class Board:
         :param position: position on the board (x, y)
         :return: None
         """
+        if not self.is_valid_move(position):
+            return False
         if position == None or self._board[position[0]][position[1]] != None:
             return False
         self._board[position[0]][position[1]] = symbol
-        if symbol == 'X':
+        if symbol == 'X' and position != None:
             self._last_X_played = position
-        else:
+        elif symbol == 'O' and position != None:
             self._last_O_played = position
         return True
-
-    def set_symbol(self, row: int, col: int,
-                   symbol: str | None) -> bool:  # set a specific position on the board to be 'X' or 'O' with row and col
-        """
-        :param row: position X of the board
-        :param col: position Y of the board
-        :param symbol: 'X' 'O' or None
-        :return: True if the symbol have been set, otherwise False
-        """
-        if self.is_valid_move((row, col)):
-            self._board[row][col] = symbol
-            return True
-        return False
 
     def is_valid_move(self, position: tuple(int, int)) -> bool:
         """
         :param position: position on the board (x, y)
         :return: True if the move is valid, False if not
         """
+        if position == None:
+            return False
         if not self.is_position_in_range(position):
             return False
         if self._board[position[0]][position[1]] == None:
@@ -102,10 +94,10 @@ class Board:
                     return True
 
         # Check vertical wins
-        for i in range(len(self._board) - 1, 3, -1):
-            for j in range(len(self._board[i])):
-                if self._board[i][j] == symbol and self._board[i - 1][j] == symbol and self._board[i - 2][j] == symbol \
-                        and self._board[i - 3][j] == symbol and self._board[i - 4][j] == symbol:
+        for i in range(len(self._board)):
+            for j in range(len(self._board[i]) - 4):
+                if self._board[i][j] == symbol and self._board[i][j + 1] == symbol and self._board[i][j + 2] == symbol \
+                        and self._board[i][j + 3] == symbol and self._board[i][j + 4] == symbol:
                     return True
 
         # Check positive slope diagonal
@@ -135,8 +127,7 @@ class Board:
         while not self.is_valid_move((row, col)):
             row = random.randint(0, self._board_size - 1)
             col = random.randint(0, self._board_size - 1)
-        if self._board[row][col] == None:
-            self._board[row][col] = symbol
+        self.update_board(symbol, (row, col))
         return (row, col)
 
     def get_empty_positions(self) -> list[(int, int)]:
@@ -201,14 +192,25 @@ class Board:
         # Check horizontal threat
         for i in range(len(self._board) - 4):
             for j in range(len(self._board[i])):
-                if self.is_valid_move((i, j)) and self._board[i + 1][j] == symbol and self._board[i + 2][j] == symbol \
-                        and self._board[i + 3][j] == symbol and self.is_valid_move((i + 4, j)) and self.is_valid_move((i + 5, j)):
-                    return (i + 4, j)
-                if self.is_valid_move((i, j)) and self.is_valid_move((i + 1, j)) and self._board[i + 2][j] == symbol \
-                        and self._board[i + 3][j] == symbol and self._board[i + 4][j] == symbol and self.is_valid_move((i + 5, j)):
-                    return (i + 1, j)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i + 5, j)):
+                    empty: list[tuple(int, int)] = []
+                    for k in range(1, 5):
+                        if self.is_valid_move((i + k, j)):
+                            empty.append((i + k, j))
+                    if len(empty) == 1:
+                        return empty[0]
 
         # Check vertical threat
+        for i in range(len(self._board)):
+            for j in range(len(self._board[i]) - 4):
+                if self.is_valid_move((i, j)) and self.is_valid_move((i, j + 5)):
+                    empty: list[tuple(int, int)] = []
+                    for k in range(1, 5):
+                        if self.is_valid_move((i, j + k)):
+                            empty.append((i, j + k))
+                    if len(empty) == 1:
+                        return empty[0]
+
         for i in range(len(self._board) - 1, 3, -1):
             for j in range(len(self._board[i])):
                 if self.is_valid_move((i, j)) and self._board[i - 1][j] == symbol and self._board[i - 2][j] == symbol \
@@ -218,29 +220,39 @@ class Board:
                         and self._board[i - 3][j] == symbol and self._board[i - 4][j] == symbol and self.is_valid_move((i - 5, j)):
                     return (i - 1, j)
 
-        # Check positive slope diagonal
+                # Check positive slope diagonal threat
         for i in range(len(self._board) - 4):
             for j in range(len(self._board[i]) - 4):
-                if self.is_valid_move((i, j)) and self.is_valid_move((i + 1, j + 1)) and self._board[i + 2][j + 2] == symbol \
-                        and self._board[i + 3][j + 3] == symbol and self._board[i + 4][j + 4] == symbol and \
-                        self.is_valid_move((i + 5, j + 5)):
-                    return (i + 1, j + 1)
-                if self.is_valid_move((i, j)) and self._board[i + 1][j + 1] == symbol and self._board[i + 2][j + 2] == symbol \
-                        and self._board[i + 3][j + 3] == symbol and self.is_valid_move((i + 4, j + 4)) and \
-                        self.is_valid_move((i + 5, j + 5)):
-                    return (i + 4, j + 4)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i + 5, j + 5)):
+                    empty: list[tuple(int, int)] = []
+                    for k in range(1, 5):
+                        if self.is_valid_move((i + k, j + k)):
+                            empty.append((i + k, j + k))
+                    if len(empty) == 1:
+                        return empty[0]
 
-        # Check negative slope diagonal
+        # Check negative slope diagonal threat
         for i in range(4, len(self._board)):
             for j in range(len(self._board[i]) - 4):
-                if self.is_valid_move((i, j)) and self._board[i - 1][j + 1] == symbol and self._board[i - 2][j + 2] == symbol \
-                        and self._board[i - 3][j + 3] == symbol and self.is_valid_move((i - 4, j + 4)) and \
-                        self.is_valid_move((i - 5, j + 5)):
-                    return (i - 4, j + 4)
-                if self.is_valid_move((i, j)) and self.is_valid_move((i - 1, j + 1)) and \
-                        self._board[i - 2][j + 2] == symbol and \
-                        self._board[i - 3][j + 3] == symbol and \
-                        self._board[i - 4][j + 4] == symbol and \
-                        self.is_valid_move((i - 5, j+5)):
-                    return (i - 1, j + 1)
+                if self.is_valid_move((i, j)) and self.is_valid_move((i - 5, j + 5)):
+                    empty: list[tuple(int, int)] = []
+                    for k in range(1, 5):
+                        if self.is_valid_move((i - k, j + k)):
+                            empty.append((i - k, j + k))
+                    if len(empty) == 1:
+                        return empty[0]
         return None
+
+    def is_one_side_tile_empty(self, position: tuple(int, int)) -> tuple(int, int) | None:
+        """
+        :param position: position on the board (x, y)
+        :return: True if a side tile of position is empty, else False
+        """
+        if position == None:
+            return None
+        for i in range(3):
+            for j in range(3):
+                if self.is_valid_move((position[0] + i - 1, position[1] + j - 1)):
+                    return (position[0] + i - 1, position[1] + j - 1)
+        return None
+
