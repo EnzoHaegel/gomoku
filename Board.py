@@ -123,11 +123,13 @@ class Board:
                     return True
         return False
 
-    def random_play(self, symbol: str | None):  # fill the board with a random position
+    def random_play(self, symbol: str | None) -> tuple(int, int) | None:  # fill the board with a random position
         """
         :param symbol: 'X' 'O' or None
         :return: None
         """
+        if len(self.get_empty_positions()) == 0:
+            return None
         row = random.randint(0, self._board_size - 1)
         col = random.randint(0, self._board_size - 1)
         while not self.is_valid_move((row, col)):
@@ -135,6 +137,7 @@ class Board:
             col = random.randint(0, self._board_size - 1)
         if self._board[row][col] == None:
             self._board[row][col] = symbol
+        return (row, col)
 
     def get_empty_positions(self) -> list[(int, int)]:
         """

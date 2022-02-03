@@ -38,11 +38,20 @@ class Ai:
         return self.get_winning_move(board, self.get_opponent_symbol())
     
     def play_best_move(self, board: Board) -> Board:
-        if board.update_board(self._symbol, self.get_winning_move(board, self._symbol)):
-            return board
-        if board.update_board(self._symbol, self.get_opponent_winning_move(board)):
-            return board
-        if board.update_board(self._symbol, board.block_threat_of_three(board.get_opponent_symbol())):
-            return board
-        board.random_play(self._symbol)
-        return board
+        """
+        :param board: current state of the board (Board Class)
+        :return: return the board updated with the new play
+        """
+        a = self.get_winning_move(board, self._symbol)
+        if board.update_board(self._symbol, a):
+            return board, a
+        b = self.get_opponent_winning_move(board)
+        if board.update_board(self._symbol, b):
+            return board, b
+        c = board.block_threat_of_three(self._symbol)
+        if board.update_board(self._symbol, c):
+            return board, c
+        d = board.block_threat_of_three(self.get_opponent_symbol())
+        if board.update_board(self._symbol, d):
+            return board, d
+        return board, board.random_play(self._symbol)
