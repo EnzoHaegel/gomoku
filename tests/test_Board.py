@@ -96,13 +96,12 @@ def test_update_board():
 
 def test_check_winner():
     board = Board(7)
+    board_long = Board(100)
     assert not board.check_winner('X')
+    assert not board_long.check_winner('X')
 
     # set 5 'X' and check winner
     for i in range(4):
-        board.update_board('X', (i, 0))
-        board.update_board('X', (i, 0))
-        board.update_board('X', (i, 0))
         board.update_board('X', (i, 0))
     assert not board.check_winner('X')
 
