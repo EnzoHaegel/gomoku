@@ -120,6 +120,9 @@ class Board:
         :param symbol: 'X' 'O' or None
         :return: None
         """
+        if self.is_valid_move((self._board_size//2, self._board_size//2)):
+            self.update_board(symbol, (self._board_size//2, self._board_size//2))
+            return (self._board_size//2, self._board_size//2)
         if len(self.get_empty_positions()) == 0:
             return None
         row = random.randint(0, self._board_size - 1)

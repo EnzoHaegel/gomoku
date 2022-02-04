@@ -47,12 +47,16 @@ class Ai:
         for position in board.get_empty_positions():
             tmp = board.copy_board()
 
-            fst, res = tmp.block_threat_of_three(symbol)
+            _, res = tmp.block_threat_of_three(symbol)
             nb = len(res)
             tmp.update_board(symbol, (position[0], position[1]))
-            fst, res = tmp.block_threat_of_three(symbol)
+            _, res = tmp.block_threat_of_three(symbol)
             if len(res) - nb > 1:
-                return fst
+                vec1 = (abs(position[0]-res[0][0]), abs(position[1]-res[0][1]))
+                vec2 = (abs(position[0]-res[1][0]), abs(position[1]-res[1][1]))
+                if not 0 in vec1 and not 0 in vec2 and vec2[0]/vec1[0] == vec2[1]/vec1[1]:
+                    continue
+                return position
         return None
     
     def play_best_move(self, board: Board) -> Board:
@@ -76,9 +80,11 @@ class Ai:
         if board._board_size <= 15:
             f = self.can_do_a_double_threat(board, self._symbol)
             if board.update_board(self._symbol, f):
+                print("Double at pos ", f)
                 return board, f
             g = self.can_do_a_double_threat(board, self.get_opponent_symbol())
             if board.update_board(self._symbol, g):
+                print("Double at pos ", g)
                 return board, g
 
         if self._symbol == 'X':

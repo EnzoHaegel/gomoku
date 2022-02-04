@@ -2,7 +2,6 @@ from AI import Ai
 from Board import Board
 import sys
 
-
 def main():
     bsize = 10
     board = Board(bsize)
@@ -18,15 +17,17 @@ def main():
             if board.check_winner('O'):
                 print("O gagne")
                 sys.exit(0)
-            # pos = input().split()
-            # if not board.update_board(sym_start, (int(pos[1]), int(pos[0]))):
-            #     print("Input invalide")
-            #     pass
-            # else:
-            iax.play_best_move(board)
-            print("IA 'X' PLAYED")
-            print(board._last_X_played)
-            board.print_board()
+            if not '-g' in sys.argv:
+                iax.play_best_move(board)
+                print("IA 'X' PLAYED")
+                print(board._last_X_played)
+                board.print_board()
+            else:
+                pos = input().split()
+                if not board.update_board(sym_start, (int(pos[1]), int(pos[0]))):
+                    print("Input invalide")
+                    pass
+
             iao.play_best_move(board)
             print("IA 'O' PLAYED")
             print(board._last_O_played)
@@ -41,4 +42,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Exited")
+        sys.exit(1)
