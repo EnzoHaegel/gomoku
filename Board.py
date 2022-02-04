@@ -268,3 +268,39 @@ class Board:
         if len(res) == 0:
             return None
         return res[random.randint(0, len(res) - 1)]
+
+    def check_if_there_is_symbol_next(self, position: tuple(int, int)) -> bool:
+        """
+        :param position: position on the board (x, y)
+        :return: True if there is a symbol 'O' or 'X' on the 3x3 square, else False
+        """
+        if position == None:
+            return False
+        for i in range(3):
+            for j in range(3):
+                if position[0] == i and position[1] == j:
+                    continue
+                try:
+                    if self._board[position[0] + i - 1][position[1] + j - 1] != None:
+                        return True
+                except IndexError:
+                    continue
+        return False
+    
+    def check_if_there_is_symbol_next_two(self, position: tuple(int, int)) -> bool:
+        """
+        :param position: position on the board (x, y)
+        :return: True if there is a symbol 'O' or 'X' on the 3x3 square, else False
+        """
+        if position == None:
+            return False
+        for i in range(5):
+            for j in range(5):
+                if position[0] == i and position[1] == j:
+                    continue
+                try:
+                    if self._board[position[0] + i - 2][position[1] + j - 2] != None:
+                        return True
+                except IndexError:
+                    continue
+        return False
