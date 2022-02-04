@@ -26,7 +26,7 @@ def test_get_winning_move():
     assert ai.get_opponent_winning_move(board) == (5, 0)
 
 def test_can_do_a_double_threat():
-    board = Board(7)
+    board = Board(9)
     ai = Ai(board._board_size, 'O')
     assert ai.can_do_a_double_threat(board, 'X') == None
     board.update_board('X', (3, 2))
@@ -39,3 +39,9 @@ def test_can_do_a_double_threat():
     for i in range(3):
         board.update_board('X', (i + 1, 3))
     assert ai.can_do_a_double_threat(board, 'X') == None
+    board.reset_board()
+    board.update_board('X', (3, 3))
+    board.update_board('X', (5, 3))
+    board.update_board('X', (2, 4))
+    board.update_board('X', (6, 4))
+    assert ai.can_do_a_double_threat(board, 'X') == (4, 3)
