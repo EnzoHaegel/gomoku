@@ -4,7 +4,6 @@
 # The board starts with all elements set to None.
 from __future__ import annotations
 
-import random
 from Board import Board
 
 
@@ -109,3 +108,29 @@ def test_check_winner():
     # set the last 'X' and check winner
     board.update_board('X', (4, 0))
     assert board.check_winner('X')
+
+def test_block_threat_of_three():
+    board = Board(7)
+    assert board.block_threat_of_three('X') == (None, [])
+    for i in range (3):
+        board.update_board('X', (i + 1, 0))
+    assert board.block_threat_of_three('X') == ((4, 0), [(4, 0)])
+    
+    board.reset_board()
+    assert board.block_threat_of_three('X') == (None, [])
+    for i in range (3):
+        board.update_board('X', (i + 1, i + 1))
+    assert board.block_threat_of_three('X') == ((4, 4), [(4, 4)])
+    
+    board.reset_board()
+    assert board.block_threat_of_three('X') == (None, [])
+    for i in range (3):
+        board.update_board('X', (i + 2, i + 2))
+    assert board.block_threat_of_three('X') == ((1, 1), [(1, 1), (5, 5)])
+
+    board.reset_board()
+    assert board.block_threat_of_three('X') == (None, [])
+    board.update_board('X', (2, 0))
+    board.update_board('X', (3, 0))
+    board.update_board('X', (5, 0))
+    assert board.block_threat_of_three('X') == ((4, 0), [(4, 0)])

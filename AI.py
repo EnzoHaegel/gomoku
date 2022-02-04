@@ -1,4 +1,5 @@
 from __future__ import annotations
+import random
 import Board
 
 class Ai:
@@ -65,7 +66,7 @@ class Ai:
         b = self.get_opponent_winning_move(board)
         if board.update_board(self._symbol, b):
             return board, b
-        c = board.block_threat_of_three(self._symbol)
+        c, _ = board.block_threat_of_three(self._symbol)
         if board.update_board(self._symbol, c):
             return board, c
         d, _ = board.block_threat_of_three(self.get_opponent_symbol())

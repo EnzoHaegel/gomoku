@@ -159,6 +159,7 @@ class Board:
         :param position: position on the board (x, y)
         :return: return True if the position is in range of the board, else False
         """
+        int(position[0]) + int(position[1])
         if position[0] < 0 or position[0] > self._board_size - 1:
             return False
         if position[1] < 0 or position[1] > self._board_size - 1:
@@ -254,10 +255,13 @@ class Board:
         :param position: position on the board (x, y)
         :return: True if a side tile of position is empty, else False
         """
+        res: list[tuple(int, int)] = []
         if position == None:
             return None
         for i in range(3):
             for j in range(3):
                 if self.is_valid_move((position[0] + i - 1, position[1] + j - 1)):
-                    return (position[0] + i - 1, position[1] + j - 1)
-        return None
+                    res.append((position[0] + i - 1, position[1] + j - 1))
+        if len(res) == 0:
+            return None
+        return res[random.randint(0, len(res) - 1)]
