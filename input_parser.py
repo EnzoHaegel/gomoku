@@ -15,7 +15,7 @@ class InputParser(metaclass=Singleton):
         self.rule = 0
         self.evaluate = (0, 0)
         self.folder = "./"
-        self.board: Board = None
+        self.game_board: Board = None
         self.ai: Ai = None
 
     def are_io_open(self) -> bool:
@@ -31,7 +31,7 @@ class InputParser(metaclass=Singleton):
         supported_sizes = [i for i in range(25)]
         if int(size) in supported_sizes:
             try:
-                self.board = Board(int(size))
+                self.game_board = Board(int(size))
                 self.ai = Ai(int(size), 'X')
             except TypeError:
                 return False
@@ -46,15 +46,15 @@ class InputParser(metaclass=Singleton):
             y = int(y)
         except TypeError:
             return False
-        self.board.update_board(self.ai.get_opponent_symbol(), (x, y))
-        x, y = self.ai.play_best_move(self.board)
+        self.game_board.update_board(self.ai.get_opponent_symbol(), (x, y))
+        x, y = self.ai.play_best_move(self.game_board)
         print(x, y, sep=',')
         return True
 
     def begin(self) -> bool:
         if self.ai == None:
             return False
-        x, y = self.ai.play_best_move(self.board)
+        x, y = self.ai.play_best_move(self.game_board)
         print(x, y, sep=',')
         return True
 
@@ -66,10 +66,11 @@ class InputParser(metaclass=Singleton):
             except Exception:
                 pass
             if player == 1:
-                self.board.update_board(self.ai.get_symbol(), x, y)
+                self.game_board.update_board(self.ai.get_symbol(), (x, y))
             if player == 2:
-                self.board.update_board(self.ai.get_opponent_symbol(), x, y)
-        x, y = self.ai.play_best_move(self.board)
+                self.game_board.update_board(self.ai.get_opponent_symbol(), (x, y))
+            pos = input()
+        x, y = self.ai.play_best_move(self.game_board)
         print(x, y, sep=',')
         return True
 

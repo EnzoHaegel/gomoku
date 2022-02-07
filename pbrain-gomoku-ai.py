@@ -23,19 +23,23 @@ def gomoku(args) -> int:
 
 
 def main(args):
-    # try:
-    if "-h" in args:
-        usage("Help:", 0)
-    if len(args) != 0:
-        usage("Bad number of arguments", 84)
-    gomoku(args)
-    # except ValueError:
-    #     usage("Value Error", 84)
-    # except RecursionError:
-    #     usage("Recursion Error", 84)
-    # except Exception:
-    #     usage("Error", 84)
+    try:
+        if "-h" in args:
+            usage("Help:", 0)
+        if len(args) != 0:
+            usage("Bad number of arguments", 84)
+        gomoku(args)
+    except ValueError:
+        usage("Value Error", 84)
+    except RecursionError:
+        usage("Recursion Error", 84)
+    except Exception:
+        usage("Error", 84)
 
 
 if __name__ == "__main__":
-    main(argv[1:])
+    try:
+        main(argv[1:])
+    except KeyboardInterrupt:
+        print("Exited")
+        sys.exit(84)
