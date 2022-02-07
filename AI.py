@@ -62,13 +62,11 @@ class Ai:
                 vec1 = (position[0]-res[0][0], position[1]-res[0][1])
                 vec2 = (position[0]-res[1][0], position[1]-res[1][1])
                 if vec1[0] * vec2[0] + vec1[1] * vec2[1] == 0:
-                    print('res: ', res)
                     return position
                 vec1 = (abs(position[0]-res[0][0]), abs(position[1]-res[0][1]))
                 vec2 = (abs(position[0]-res[1][0]), abs(position[1]-res[1][1]))
                 if not 0 in vec1 and not 0 in vec2 and vec2[0]/vec1[0] == vec2[1]/vec1[1]:
                     continue
-                print('res: ', res)
                 return position
         return None
     
