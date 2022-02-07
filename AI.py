@@ -96,45 +96,42 @@ class Ai:
         """
         a = self.get_winning_move(board, self._symbol)
         if board.update_board(self._symbol, a):
-            return board, a
+            return a
         b = self.get_opponent_winning_move(board)
         if board.update_board(self._symbol, b):
-            return board, b
+            return b
         c, _ = board.block_threat_of_three(self._symbol)
         if board.update_board(self._symbol, c):
-            return board, c
+            return c
         d, _ = board.block_threat_of_three(self.get_opponent_symbol())
         if board.update_board(self._symbol, d):
-            return board, d
+            return d
         
         if board._board_size <= 50:
             h = self.can_do_double_win(board, self._symbol)
             if board.update_board(self._symbol, h):
-                return board, h
+                return h
             i = self.can_do_double_win(board, self.get_opponent_symbol())
             if board.update_board(self._symbol, i):
-                return board, i
+                return i
 
             f = self.can_do_a_double_threat(board, self._symbol)
             if board.update_board(self._symbol, f):
-                print("Double at pos ", f)
-                return board, f
+                return f
             g = self.can_do_a_double_threat(board, self.get_opponent_symbol())
             if board.update_board(self._symbol, g):
-                print("Double at pos ", g)
-                return board, g
+                return g
 
         if self._symbol == 'X':
             e = board.is_one_side_tile_empty(board._last_X_played)
         else:
             e = board.is_one_side_tile_empty(board._last_O_played)
         if board.update_board(self._symbol, e):
-            return board, e
+            return e
         if self._symbol == 'X':
             e = board.is_one_side_tile_empty(board._last_O_played)
         else:
             e = board.is_one_side_tile_empty(board._last_X_played)
         if board.update_board(self._symbol, e):
-            return board, e
-
-        return board, board.random_play(self._symbol)
+            return e
+        return board.random_play(self._symbol)

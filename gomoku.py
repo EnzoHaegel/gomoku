@@ -3,7 +3,7 @@ from Board import Board
 import sys
 
 def main():
-    bsize = 12
+    bsize = 15
     board = Board(bsize)
     board.print_board()
     iax = Ai(bsize, 'X')
