@@ -30,20 +30,30 @@ class InputParser(metaclass=Singleton):
     def start(self, size: str = "15") -> bool:
         supported_sizes = [i for i in range(25)]
         if int(size) in supported_sizes:
-            self.board = Board(size)
-            self.ai = Ai(size, 'X')
+            try:
+                self.board = Board(int(size))
+                self.ai = Ai(int(size), 'X')
+            except TypeError:
+                return False
             print("OK")
         else:
             print("ERROR unsupported size")
         return True
 
     def turn(self, x: str = "0", y: str = "0") -> bool:
-        self.board.update_board(self.ai.get_opponent_symbol(), x, y)
+        try:
+            x = int(x)
+            y = int(y)
+        except TypeError:
+            return False
+        self.board.update_board(self.ai.get_opponent_symbol(), (x, y))
         x, y = self.ai.play_best_move(self.board)
         print(x, y, sep=',')
         return True
 
     def begin(self) -> bool:
+        if self.ai == None:
+            return False
         x, y = self.ai.play_best_move(self.board)
         print(x, y, sep=',')
         return True
