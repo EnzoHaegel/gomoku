@@ -134,3 +134,11 @@ def test_block_threat_of_three():
     board.update_board('X', (3, 0))
     board.update_board('X', (5, 0))
     assert board.block_threat_of_three('X') == ((4, 0), [(4, 0)])
+
+    board.reset_board()
+    assert board.block_threat_of_three('X') == (None, [])
+    board.update_board('X', (2, 2))
+    board.update_board('X', (3, 3))
+    board.update_board('X', (5, 5))
+    assert board.block_threat_of_three('X') == ((4, 4), [(4, 4)])
+
